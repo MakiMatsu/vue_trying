@@ -1,8 +1,13 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+import App from "./App.vue";
+import Mytext from "./components/MyText.vue";
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
+let v = new Vue({
+  render: h => h(App)
+}).$mount("#app");
+
+let v2 = new Vue({
+  render: h => h(Mytext)
+}).$mount("#mytext");
