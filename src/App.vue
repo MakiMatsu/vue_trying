@@ -1,61 +1,50 @@
 <template>
-  <div>
-    <p v-if="msg.length > 0">{{msg}}</p>
-    <p v-else>入力してなー</p>
-    <input type="text" v-model="msg">
-    <button @click="clear()">clear</button>
-    <button @click="addBikkuri()">!</button>
-    <button @click="addStar()">星</button>
-    <MyText msg/>
+  <div class="home">
+    <p>{{greetText}}</p>
+    <p>挨拶した回数：{{count}}回</p>
+    <p v-if="isRegulars">いつもありがとうございます</p>
+    <p>
+      <MyButton class="my-button" :greet="greetText" @clicked="onMyButtonClicked">挨拶する</MyButton>
+    </p>
+    <p>
+      <ResetButton v-model="greetText"></ResetButton>
+    </p>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import MyText from "./components/MyText.vue";
-// import HelloWorld from "./components/HelloWorld.vue";
+import { Component, Watch, Vue } from "vue-property-decorator";
+import MyButton from "@/components/MyButton.vue";
+import ResetButton from "@/components/ResetButton.vue";
 
-// @Component({
-//   components: {
-//     // HelloWorld
-//   }
-// })
-export default Vue.extend({
-  // components: {
-  //   Mytext
-  // },
-  data() {
-    return {
-      msg: ""
-    };
-  },
-  methods: {
-    clear() {
-      this.msg = "";
-    },
-    addBikkuri() {
-      this.msg = this.msg + "!";
-    },
-    addStar() {
-      this.msg = this.msg + "★";
+@Component({
+  components: {
+    MyButton,
+    ResetButton
+  }
+})
+export default class Home extends Vue {
+  private count: number = 0;
+  public greetText: string = "Hello";
+
+  //vue.js でいうところのcomputedにあたる処理
+  public get isRegulars(): boolean {
+    return this.count >= 5;
+  }
+  @Watch("count")
+  public countChanger() {
+    if (this.count === 5) {
+      alert("常連になりました");
     }
   }
-});
-</script>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  public onMyButtonClicked(count: number) {
+    this.count = count;
+    if (this.greetText === "こんにちは") {
+      this.greetText = "Hello";
+    } else if (this.greetText === "Hello") {
+      this.greetText = "こんにちは";
+    }
+  }
 }
-input {
-  width: 15rem;
-}
-button {
-  margin: 0.2rem;
-}
-</style>
+</script>
